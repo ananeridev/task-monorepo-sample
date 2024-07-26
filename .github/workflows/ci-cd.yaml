@@ -43,13 +43,13 @@ jobs:
         run: npm test
 
       - name: Build Docker image
-        run: docker build -t your-dockerhub-username/task-management-backend:latest ./backend
+        run: docker build -t "${{ secrets.DOCKER_USERNAME }}"/task-management-backend:latest ./backend
 
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker push your-dockerhub-username/task-management-backend:latest
+        run: docker push "${{ secrets.DOCKER_USERNAME }}"/task-management-backend:latest
 
       - name: Set up Kubernetes
         uses: azure/k8s-deploy@v1
@@ -61,4 +61,4 @@ jobs:
             infra/k8s/secrets.yaml
             infra/k8s/namespace.yaml
           images: |
-            your-dockerhub-username/task-management-backend:latest
+            "${{ secrets.DOCKER_USERNAME }}"/task-management-backend:latest
